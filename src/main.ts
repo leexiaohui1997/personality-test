@@ -1,3 +1,5 @@
+import './helper/device';
+
 import { createApp } from 'vue';
 import App from './App.vue';
 
