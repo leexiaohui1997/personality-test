@@ -1,10 +1,21 @@
+@font-face {
+  font-family: HYYaKuHei;
+  src: url('../fonts/HYYakuHei.ttf') format('truetype');
+}
+
 :root {
-  --primary-color: #4c44f1;
+  --color-pink: #ff69b4;
+  --color-purple: #7063e5;
+  --color-purple-dark: #4c44f1;
+  --color-green: #008000;
+
+  --primary-color: var(--color-purple);
 }
 
 body {
   margin: 0;
   font-size: 16px;
+  font-family: HYYaKuHei, sans-serif;
 }
 
 button {

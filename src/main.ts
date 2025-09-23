@@ -1,3 +1,4 @@
+import 'font-awesome/css/font-awesome.min.css';
 import './helper/device';
 import './assets/styles/base.css';
 
