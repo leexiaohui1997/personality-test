@@ -8,6 +8,7 @@
   --color-purple: #7063e5;
   --color-purple-dark: #4c44f1;
   --color-green: #008000;
+  --color-gray: #808080;
 
   --primary-color: var(--color-purple);
 }
@@ -16,9 +17,14 @@ body {
   margin: 0;
   font-size: 16px;
   font-family: HYYaKuHei, sans-serif;
+  user-select: none;
 }
 
 button {
   all: unset;
   cursor: pointer;
+}
+
+.is-mobile * {
+  cursor: default !important;
 }

@@ -28,6 +28,23 @@
         </div>
       </div>
     </div>
+
+    <div class="navbar">
+      <div class="navbar-item" :class="{ disabled: disablePrev }" @click="prevQuestion">
+        <i class="fa fa-arrow-left"></i>
+        <span>上一题</span>
+      </div>
+
+      <div class="navbar-item primary" v-if="showSubmit" @click="handleSubmit">
+        <i class="fa fa-file-text-o"></i>
+        <span>生成报告</span>
+      </div>
+
+      <div class="navbar-item" :class="{ disabled: disableNext }" v-else @click="nextQuestion">
+        <span>下一题</span>
+        <i class="fa fa-arrow-right"></i>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -35,6 +52,9 @@
 import { ref, onMounted, computed } from 'vue';
 import { getQuestions } from '@/service/fapig';
 import type { Question } from '@/service/fapig';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const questions = ref<Question[]>([]);
 const currentIndex = ref(0);
@@ -53,10 +73,46 @@ const onClickAnswer = (answer: string) => {
   }, 300);
 };
 
-const nextQuestion = () => {
-  if (currentIndex.value < questions.value.length - 1) {
-    currentIndex.value++;
+const disablePrev = computed(() => {
+  return currentIndex.value === 0;
+});
+const disableNext = computed(() => {
+  if (!answers.value.has(currentIndex.value)) {
+    return true;
   }
+  return currentIndex.value === questions.value.length - 1;
+});
+const showSubmit = computed(() => {
+  return (
+    currentIndex.value === questions.value.length - 1 &&
+    answers.value.size === questions.value.length
+  );
+});
+
+const nextQuestion = () => {
+  if (currentIndex.value === questions.value.length - 1) {
+    return;
+  }
+  currentIndex.value++;
+};
+
+const prevQuestion = () => {
+  if (currentIndex.value === 0) {
+    return;
+  }
+  currentIndex.value--;
+};
+
+const handleSubmit = () => {
+  const concatedAnswer = Array.from({ length: questions.value.length }, (_, index) => {
+    return answers.value.get(index) || '';
+  }).join(',');
+  router.push({
+    path: '/result',
+    query: {
+      answer: concatedAnswer,
+    },
+  });
 };
 
 onMounted(async () => {
@@ -141,5 +197,37 @@ onMounted(async () => {
 }
 .answer-item:not(.active) .answer-item-check {
   display: none;
+}
+
+.navbar {
+  gap: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  margin-top: 20px;
+}
+.navbar-item {
+  gap: 8px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  height: 40px;
+  border-radius: 20px;
+  border: 1px solid var(--color-purple);
+  max-width: 120px;
+  background: #fff;
+}
+.navbar-item.primary {
+  background: var(--color-purple);
+  color: #fff;
+  border-color: var(--color-purple);
+}
+.navbar-item.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 </style>
