@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { memoize } from 'lodash-es';
 
 export type Response<T> = {
   error_code: number;
@@ -25,5 +26,7 @@ async function request<R>(url: string, params: Record<string, unknown>): Promise
 }
 
 // 获取题目
-export const getQuestions = () =>
-  request<Question[]>('/fapig/character_test/questions', { level: 'senior' });
+export const getQuestions = memoize(
+  () => request<Question[]>('/fapig/character_test/questions', { level: 'senior' }),
+  () => 'questions'
+);

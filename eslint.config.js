@@ -9,6 +9,17 @@ export default [
   ...tseslint.configs.recommended,
   ...vue.configs['flat/recommended'],
   {
+    files: ['**/*.vue'],
+    languageOptions: {
+      parser: vue.processors['.vue'],
+      parserOptions: {
+        parser: tseslint.parser,
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+    },
+  },
+  {
     ignores: ['dist/**', 'node_modules/**'],
   },
   {
@@ -17,6 +28,22 @@ export default [
       globals: {
         ...globals.browser,
         ...globals.node,
+      },
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+    },
+  },
+  {
+    files: ['**/*.vue'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+      },
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
       },
     },
   },
