@@ -15,6 +15,18 @@ export type Question = {
   ib: string;
 };
 
+export type Analysis = {
+  alphabet: string;
+  vocabulary: string;
+  occupation: string;
+  summarize: string[];
+  desc: string[];
+  characteristic: Array<{
+    title: string;
+    desc: string[];
+  }>;
+};
+
 const APP_KEY = import.meta.env.VITE_FAPIG_APP_KEY;
 
 async function request<R>(url: string, params: Record<string, unknown>): Promise<R> {
@@ -29,4 +41,13 @@ async function request<R>(url: string, params: Record<string, unknown>): Promise
 export const getQuestions = memoize(
   () => request<Question[]>('/fapig/character_test/questions', { level: 'senior' }),
   () => 'questions'
+);
+
+// 获取结果
+export const getAnalysis = memoize(
+  (answers: string) =>
+    request<Analysis>('/fapig/character_test/analysis', {
+      answers,
+    }),
+  (answers) => answers
 );
