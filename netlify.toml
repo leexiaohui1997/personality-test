@@ -1,0 +1,57 @@
+[build]
+  # 构建命令
+  command = "pnpm build"
+  # 发布目录
+  publish = "dist"
+
+# 代理配置
+[[redirects]]
+  # 匹配所有以 /fapig 开头的请求
+  from = "/fapig/*"
+  # 重定向到聚合数据 API
+  to = "http://apis.juhe.cn/fapig/:splat"
+  # 状态码 200 表示代理转发
+  status = 200
+  # 强制重定向
+  force = true
+  # 添加必要的头部信息
+  headers = { 
+    "Access-Control-Allow-Origin" = "*",
+    "Access-Control-Allow-Methods" = "GET, POST, PUT, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers" = "Content-Type, Authorization, X-Requested-With"
+  }
+
+# 处理预检请求
+[[redirects]]
+  from = "/fapig/*"
+  to = "http://apis.juhe.cn/fapig/:splat"
+  status = 200
+  conditions = { Method = ["OPTIONS"] }
+  headers = { 
+    "Access-Control-Allow-Origin" = "*",
+    "Access-Control-Allow-Methods" = "GET, POST, PUT, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers" = "Content-Type, Authorization, X-Requested-With",
+    "Access-Control-Max-Age" = "86400"
+  }
+
+# SPA 路由配置 - 所有非 API 请求都重定向到 index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  conditions = { Role = ["admin"] }
+
+# 静态资源缓存配置
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# 安全头部配置
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
