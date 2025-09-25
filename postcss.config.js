@@ -8,7 +8,6 @@ export default {
       replace: true, // 是否替换属性值
       mediaQuery: false, // 是否转换媒体查询中的px
       minPixelValue: 1, // 最小转换的像素值
-      exclude: /node_modules/i, // 排除node_modules目录
     },
   },
 };
